@@ -1,0 +1,53 @@
+# .github/workflows/build-release.yml
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '1.**' # Триггерит ветки 1.20.1, 1.21.4 и т.д.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Необходимо для создания релиза
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # ОПТИМИЗАЦИЯ ГОТЯЧЕГО ПУТИ: Официальный экшен Gradle берет на себя кэширование
+      # зависимостей, маппингов Loom и кэша тасок. Кардинально ускоряет CI.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        # --no-daemon обязателен для CI, чтобы процесс не висел в памяти
+        run: ./gradlew build --no-daemon
+
+      - name: Get branch name and short SHA
+        id: vars
+        run: |
+          echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.BRANCH_NAME }}-${{ env.SHORT_SHA }}
+          name: Release ${{ env.BRANCH_NAME }}-${{ env.SHORT_SHA }}
+          # Собираем все собранные jar из модулей (forge, fabric, common), исключая мусор
+          files: |
+            */build/libs/*.jar
+            !*/build/libs/*-dev.jar
+            !*/build/libs/*-sources.jar
+            !*/build/libs/*-dev-shadow.jar
