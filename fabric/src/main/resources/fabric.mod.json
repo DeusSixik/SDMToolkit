@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "sdmtoolkit",
+  "version": "${version}",
+  "name": "SDMToolkit",
+  "description": " Improved version of SDM Core ",
+  "authors": ["Sixik"],
+  "contact": {
+    "homepage": ""  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/sdmtoolkit/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.sixik.sdmtoolkit.fabric.SDMToolkitFabric"
+    ],
+    "client": [
+      "dev.sixik.sdmtoolkit.fabric.client.SdmtoolkitFabricClient"
+    ]
+  },
+  "mixins": [
+    "sdmtoolkit.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+    ,"architectury": ">=9.2.14"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
