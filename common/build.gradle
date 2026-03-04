@@ -10,6 +10,8 @@ dependencies {
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
-    minecraftLibraries("com.github.ben-manes.caffeine:caffeine:3.2.3")
-    include(minecraftRuntimeLibraries("com.github.ben-manes.caffeine:caffeine:3.2.3"))
+//    minecraftLibraries("com.github.ben-manes.caffeine:caffeine:3.2.3")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3") {
+        transitive = false
+    }
 }

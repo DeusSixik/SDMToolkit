@@ -3,7 +3,7 @@ package dev.sixik.sdmtoolkit.data;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.RemovalCause;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.Collection;
